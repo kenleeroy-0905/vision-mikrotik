@@ -19,7 +19,7 @@ function Analytics() {
         setValue(newValue);
     };
 
-    const [eventData, setEventData] = useState([]);
+    const [mapData, setMapData] = useState([]);
 
 
 
@@ -35,7 +35,7 @@ function Analytics() {
             return { country, city, srcAddress, timeout, protocol };
             });
 
-            setEventData(eventData);
+            setMapData(eventData);
 
       // Make a POST request for each extracted data object
             extractedDataArray.forEach(async (extractedData) => {
@@ -559,7 +559,7 @@ function Analytics() {
         <TabPanel value={value} index={0} sx={{}}>
             <Box >
                 <Box sx={styles.statsContainer}>
-                    <Map eventData={eventData} country={countryCodes} countryLow={countryCodesLow}/>
+                    <Map mapData={mapData} country={countryCodes} countryLow={countryCodesLow}/>
                 </Box>
 
             </Box>

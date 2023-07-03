@@ -46,8 +46,6 @@ const AllConnection = ({ country, countryLow }) => {
               month: "long",
               day: "numeric",
               year: "numeric",
-              hour: "numeric",
-              minute: "numeric",
             }),
           };
         });

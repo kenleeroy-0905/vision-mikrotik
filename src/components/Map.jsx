@@ -27,7 +27,7 @@ const createClusterCustomIcon = function (cluster) {
   });
 };
 
-const Map = ({ eventData, country, countryLow }) => {
+const Map = ({ mapData, country, countryLow }) => {
   return (
     <div className="map">
       <MapContainer
@@ -68,7 +68,7 @@ const Map = ({ eventData, country, countryLow }) => {
           chunkedLoading
           iconCreateFunction={createClusterCustomIcon}
         >
-          {eventData.map((data, index) => {
+          {mapData.map((data, index) => {
             const ip = data["src-address"]?.split(":")[0];
             const port = data["src-address"]?.split(":")[1];
             const position = [data.latitude, data.longitude];

@@ -1,0 +1,44 @@
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+canvas {
+  width: 100% !important;
+}
+
+.leaflet-container {
+  height: 60vh;
+  width: 85vw;
+}
+
+.cluster-icon {
+  background-color: #333;
+  height: 2em;
+  width: 2em;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  box-shadow: 0 0 0px 5px #fff;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  padding: 5px 0;
+}
+
+.gmFWS {
+  height: 20px;
+  margin-right: 4px;
+  vertical-align: bottom;
+  width: 20px;
+}

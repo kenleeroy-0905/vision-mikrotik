@@ -28,7 +28,7 @@ const AllConnectionVpn = () => {
   const [lastUpdated, setLastUpdated] = useState('');
 
   useEffect(() => {
-    setInterval(async()=>{
+   const fetchData = async()=>{
       try {
         const res = await axios.get('http://localhost:5000/connections-vpn'); // Fetch data from your API endpoint
         const newRows = res.data.map((row, index) => ({
@@ -54,7 +54,8 @@ const AllConnectionVpn = () => {
         console.log(error);
         setLoading(false);
       }
-    }, 10000);
+    }
+    fetchData();
   }, []);
 
 

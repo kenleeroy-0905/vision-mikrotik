@@ -29,8 +29,8 @@ const AllConnection = ({ country, countryLow }) => {
   const [lastUpdated, setLastUpdated] = useState('');
 
   useEffect(() => {
-    setInterval(async () => {
-      try {
+   const fetchData = async () => {
+      try{
         const res = await axios.get("http://localhost:5000/connections");
         const modifiedData = res.data.map((row, index) => {
           const [ipAddress, port] = row.srcAddress.split(":");
@@ -59,7 +59,10 @@ const AllConnection = ({ country, countryLow }) => {
         console.log(error);
         setLoading(false);
       }
-    }, 10000);
+
+      
+    }
+    fetchData();
   }, []);
 
   const columns = [
@@ -91,7 +94,7 @@ const AllConnection = ({ country, countryLow }) => {
     <Box>
       <Typography variant="cardTitle">Connections Log</Typography>
       <Typography variant="body1">Last Updated: {lastUpdated}</Typography>
-      <div style={{ height: '600', width: '100%' }}>
+      <div style={{ height: '400', width: '100%' }}>
         <DataGrid
           rows={tableData}
           columns={columns}

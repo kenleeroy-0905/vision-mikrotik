@@ -49,7 +49,7 @@ const Connection = ({country, countryLow}) => {
         console.log(error);
         setLoading(false);
       }     
-    }, 5000);
+    }, 10000);
   }, []);
 
   const columns = [

@@ -3,6 +3,11 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+const createCsvWriter = require("csv-writer").createObjectCsvWriter;
+const path = require("path");
+const fs = require("fs");
+const cron = require("node-cron");
+const { startOfDay, isSameDay, format } = require("date-fns");
 
 const app = express();
 const port = 5000;
@@ -110,6 +115,47 @@ app.get("/connections", async (req, res) => {
   }
 });
 
+cron.schedule("55 59 23 * * *", async () => {
+  try {
+    const eventData = await EventData.find();
+
+    // Filter the eventData array for data with timestamp of the current date
+    const currentDate = startOfDay(new Date());
+    const filteredEventData = eventData.filter((data) => {
+      const dataDate = startOfDay(new Date(data.createdAt));
+      return isSameDay(currentDate, dataDate);
+    });
+
+    // Format the timestamp to a readable date format
+    const formattedEventData = filteredEventData.map((data) => ({
+      ...data._doc,
+      timestamp: format(new Date(data.createdAt), "MMM d, yyyy h:mm a"),
+    }));
+
+    const csvWriter = createCsvWriter({
+      path: path.join(
+        __dirname,
+        "logs",
+        `ConnectionLogs_${getDateFormatted()}.csv`
+      ),
+      header: [
+        { id: "country", title: "Country" },
+        { id: "city", title: "City" },
+        { id: "srcAddress", title: "Source Address" },
+        { id: "timeout", title: "Timeout" },
+        { id: "protocol", title: "Protocol" },
+        { id: "timestamp", title: "Timestamp" },
+      ],
+    });
+
+    await csvWriter.writeRecords(formattedEventData);
+
+    console.log("Data export completed successfully");
+  } catch (error) {
+    console.error("Error exporting data:", error);
+  }
+});
+
 app.post("/save-connections-vpn", async (req, res) => {
   const { callerId, name, service, uptime } = req.body.eventDataVpn;
   const eventData = new VpnData({
@@ -141,6 +187,55 @@ app.get("/connections-vpn", async (req, res) => {
     res.status(500).send({ error: "Internal Server Error" }); // Sending a more detailed error response
   }
 });
+
+cron.schedule("55 59 23 * * *", async () => {
+  try {
+    const eventData = await VpnData.find();
+
+    // Filter the eventData array for data with timestamp of the current date
+    const currentDate = startOfDay(new Date());
+    const filteredEventData = eventData.filter((data) => {
+      const dataDate = startOfDay(new Date(data.createdAt));
+      return isSameDay(currentDate, dataDate);
+    });
+
+    // Format the timestamp to a readable date format
+    const formattedEventData = filteredEventData.map((data) => ({
+      ...data._doc,
+      timestamp: format(new Date(data.createdAt), "MMM d, yyyy h:mm a"),
+    }));
+
+    const csvWriter = createCsvWriter({
+      path: path.join(
+        __dirname,
+        "VpnLogs",
+        `VpnConnectionLogs_${getDateFormatted()}.csv`
+      ),
+      header: [
+        { id: "callerId", title: "Caller-Id" },
+        { id: "name", title: "Name" },
+        { id: "service", title: "Service" },
+        { id: "uptime", title: "Uptime" },
+        { id: "timestamp", title: "Timestamp" },
+      ],
+    });
+
+    await csvWriter.writeRecords(formattedEventData);
+
+    console.log("Data export completed successfully");
+  } catch (error) {
+    console.error("Error exporting data:", error);
+  }
+});
+
+function getDateFormatted() {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDate.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
 
 // Start the server
 app.listen(port, () => {

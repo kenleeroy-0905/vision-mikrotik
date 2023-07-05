@@ -1,20 +1,21 @@
-
 import { AppBar, Badge, Box, IconButton, Toolbar, Typography } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu'
 import SettingsIcon from '@mui/icons-material/Settings';
-import LogoutIcon from '@mui/icons-material/Logout';
+import { useSelector} from 'react-redux';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useProSidebar } from "react-pro-sidebar";
 
 function AppHeader() {
-
+    const isLoggedIn = useSelector((state) => state.isLoggedIn);
     const { collapseSidebar, toggleSidebar, collapsed, broken } = useProSidebar();
 
     return <AppBar position="sticky" sx={styles.appBar}>
-        <Toolbar >
-            <IconButton onClick={() => broken ? toggleSidebar() : collapseSidebar()} color="secondary">
+        <Toolbar>
+            {
+                isLoggedIn && <IconButton onClick={() => broken ? toggleSidebar() : collapseSidebar()} color="secondary">
                 <MenuIcon />
             </IconButton>
+            }
             <Box
                 component={'img'}
                 sx={styles.appLogo}
@@ -22,9 +23,6 @@ function AppHeader() {
             </Box>        
             <Box
                 sx={{ flexGrow: 1 }} />
-            <IconButton title="Sign Out" color="secondary">
-                <LogoutIcon />
-            </IconButton>
         </Toolbar>
     </AppBar>;
 }

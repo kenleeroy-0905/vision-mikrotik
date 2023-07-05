@@ -2,10 +2,20 @@ import { Avatar, Box, Typography, useTheme } from "@mui/material";
 import { Menu, MenuItem, Sidebar, useProSidebar } from "react-pro-sidebar";
 import AnalyticsOutlinedIcon from '@mui/icons-material/AnalyticsOutlined'; 
 import { Link, useNavigate } from "react-router-dom";
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useDispatch } from "react-redux";
 
 function SideNav() {
     const { collapsed } = useProSidebar();
     const theme = useTheme();
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+          dispatch({ type: 'LOGOUT' });
+          navigate('/');
+      };
 
     return <Sidebar
         style={{ height: "100%", top: 'auto' }}
@@ -27,6 +37,7 @@ function SideNav() {
                 },
             }}>
             <MenuItem active={window.location.pathname === "/analytics"} component={<Link to="/" />} icon={<AnalyticsOutlinedIcon />}> <Typography variant="body2">Dashboard </Typography></MenuItem>
+            <MenuItem icon={<LogoutIcon />} onClick={handleLogout}> <Typography variant="body2">Logout</Typography></MenuItem>
         </Menu >
     </Sidebar >;
 }

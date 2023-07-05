@@ -5,11 +5,7 @@ import Customization from '../containers/Customization';
 import Dashboard from '../containers/Dashboard';
 
 const AppRoutes = () => {
-    return <Routes>
-        <Route path='/' element={<Analytics />} />
-        <Route path='/content' element={<Content />} />
-        <Route path='/customization' element={<Customization />} />
-    </Routes>
+    return 
 };
 
 export default AppRoutes;
